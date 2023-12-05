@@ -14,6 +14,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       fullName: userInfo.fullName,
       password: bcrypt.hashSync(`${userInfo.fullName}2023`, salt),
       role: "staff",
+      contactNumber: userInfo.contactNumber,
       image: "",
     };
 
