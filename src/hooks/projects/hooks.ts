@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 const schema = yup.object().shape({
-  searchValue: yup.string().optional(),
+  searchValue: yup.string().required(),
 });
 
 interface FormValues {

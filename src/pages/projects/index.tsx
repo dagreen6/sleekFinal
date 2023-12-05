@@ -32,7 +32,7 @@ const ProjectListPage = () => {
             />
 
             <Button variant="contained" onClick={appendRequestParamForFilter}>
-              Filter
+              Search
             </Button>
           </Stack>
         </Grid>

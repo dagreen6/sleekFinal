@@ -20,7 +20,7 @@ export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
     fileUrl: string | undefined;
   }>();
 
-  const { control, reset, getValues } = useForm<{
+  const { control, reset, getValues, formState: {isValid} } = useForm<{
     purchaseOrderNumber: string;
   }>({
     resolver: yupResolver(schema),
@@ -58,5 +58,6 @@ export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
     file,
     setFile,
     onSubmit: updateProjectPhase,
+    isValid
   };
 };

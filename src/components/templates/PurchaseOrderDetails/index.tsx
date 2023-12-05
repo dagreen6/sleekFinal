@@ -3,6 +3,7 @@ import FormBase from "@/components/parts/FormBase";
 import TextInput from "@/components/parts/TextInput";
 import ValidationLabel from "@/components/parts/ValidationLabel";
 import { UploadDropzone } from "@/utils/uploadthing";
+import Image from "next/image";
 import {
   Box,
   Button,
@@ -319,7 +320,8 @@ const PurchaseOrderDetails = () => {
           </Grid>
           <Grid item xs={12} lg={6} zeroMinWidth>
             <Box height={680} border={3} borderColor="grey.300">
-              {fileToPreview ? (
+              {fileToPreview?.fileUrl &&
+              fileToPreview?.fileName?.split(".")[1] === "pdf" ? (
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                   <Viewer
                     fileUrl={fileToPreview.fileUrl || ""}
@@ -327,14 +329,12 @@ const PurchaseOrderDetails = () => {
                   />
                 </Worker>
               ) : (
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  height={680}
-                >
-                  <Typography>No file to preview</Typography>
-                </Stack>
+                <Image
+                  src={fileToPreview?.fileUrl!}
+                  alt=""
+                  width={690}
+                  height={675}
+                />
               )}
             </Box>
           </Grid>

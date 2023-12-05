@@ -10,6 +10,7 @@ import PurchaseOrderNewForm from "../../PurchaseOrderDetails";
 import TextInput from "@/components/parts/TextInput";
 import { Alert, Stack } from "@mui/material";
 import { SpecialZoomLevel, Viewer, Worker } from "@react-pdf-viewer/core";
+import Image from "next/image";
 
 export interface PurchaseOrderProps {
   projectId: string;
@@ -24,7 +25,7 @@ const PurchaseOrderDialog = ({
   handleClose,
   status,
 }: PurchaseOrderProps) => {
-  const { handleResetAndClose, file, setFile, onSubmit, control } = useHooks({
+  const { handleResetAndClose, file, setFile, onSubmit, control, isValid } = useHooks({
     handleClose,
     projectId,
     status,
@@ -41,7 +42,7 @@ const PurchaseOrderDialog = ({
       cancelButtonLabel={"Close"}
       successButtonProps={{ variant: "contained", color: "primary" }}
       successButtonLabel={"Confirm"}
-      disabled={!file}
+      disabled={!file?.fileName || !isValid}
     >
       <Alert variant="standard" severity="info" sx={{ mb: 2 }}>
         <strong>
@@ -56,22 +57,7 @@ const PurchaseOrderDialog = ({
         label="Purchase Order #"
         hasRequiredLabel
       />
-      {file?.fileName && file.fileUrl ? (
-        <Stack direction="column" gap={2}>
-          <FilePreviewPanel
-            fileName={file.fileName}
-            fileUrl={file.fileUrl}
-            onRemove={() => setFile({ fileName: "", fileUrl: "" })}
-            showDownloadIcon={false}
-          />
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-            <Viewer
-              fileUrl={file.fileUrl || ""}
-              defaultScale={SpecialZoomLevel.ActualSize}
-            />
-          </Worker>
-        </Stack>
-      ) : (
+      {!file?.fileName && (
         <Box>
           <UploadDropzone
             endpoint="bucketFiles"
@@ -87,6 +73,25 @@ const PurchaseOrderDialog = ({
             }}
           />
         </Box>
+      )}
+
+      {file?.fileUrl && file.fileName?.split(".")[1] === "pdf" ? (
+        <Stack direction="column" gap={2}>
+          <FilePreviewPanel
+            fileName={file.fileName}
+            fileUrl={file.fileUrl}
+            onRemove={() => setFile({ fileName: "", fileUrl: "" })}
+            showDownloadIcon={false}
+          />
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+            <Viewer
+              fileUrl={file.fileUrl || ""}
+              defaultScale={SpecialZoomLevel.ActualSize}
+            />
+          </Worker>
+        </Stack>
+      ) : (
+        <Image src={file?.fileUrl!} alt="" width={550} height={675} />
       )}
     </Dialog>
   );
